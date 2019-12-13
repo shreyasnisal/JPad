@@ -1,2 +1,5 @@
 #ignore all bat files
 *.bat
+
+#ignore class files
+*.class
