@@ -37,6 +37,13 @@ public class KeyboardShortcutsListener extends KeyAdapter {
 			//ctrl + u
 			PreferencesOperations.toggleUnderline(frame);
 		}
-		
+		else if (e.getKeyCode() == KeyEvent.VK_EQUALS && (e.getModifiers() & KeyEvent.CTRL_MASK) != 0) {
+			System.out.println("Font+");
+			PreferencesOperations.increaseFontSize(frame);
+		}
+		else if (e.getKeyCode() == KeyEvent.VK_MINUS && (e.getModifiers() & KeyEvent.CTRL_MASK) != 0) {
+			System.out.println("Font-");
+			PreferencesOperations.decreaseFontSize(frame);
+		}
 	}
 }
