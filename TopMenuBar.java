@@ -176,7 +176,7 @@ public class TopMenuBar extends JMenuBar {
 		fontStyle.add(italics);
 		italics.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				PreferencesOperations.toggleItalics(frame);
+				PreferencesOperations.toggleItalic(frame);
 			}
 		});
 		JMenuItem underline = new JMenuItem("Underline");

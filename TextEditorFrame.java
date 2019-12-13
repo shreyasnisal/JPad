@@ -27,6 +27,7 @@ public class TextEditorFrame extends JFrame {
 		Font textAreaFont = new Font("Sans-Serif", Font.PLAIN, 24);
 		textArea.setFont(textAreaFont);
 		textArea.setMargin(new Insets(10, 10, 10, 0));
+		textArea.addKeyListener(new KeyboardShortcutsListener(this));
 
 		add(textAreaScroll, BorderLayout.CENTER);
 

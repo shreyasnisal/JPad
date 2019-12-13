@@ -40,9 +40,9 @@ public class PreferencesOperations {
 	}
 
 	public static void toggleItalic(TextEditorFrame parent) {
-		StyledDocument doc = (StyledDocument) frame.getTextArea().getDocument();
-	    int selectionEnd = frame.getTextArea().getSelectionEnd();
-	    int selectionStart = frame.getTextArea().getSelectionStart();
+		StyledDocument doc = (StyledDocument) parent.getTextArea().getDocument();
+	    int selectionEnd = parent.getTextArea().getSelectionEnd();
+	    int selectionStart = parent.getTextArea().getSelectionStart();
 	    if (selectionStart == selectionEnd) {
 	      return;
 	    }
@@ -51,13 +51,13 @@ public class PreferencesOperations {
 
 	    MutableAttributeSet asNew = new SimpleAttributeSet(as.copyAttributes());
 	    StyleConstants.setItalic(asNew, !StyleConstants.isItalic(as));
-	    doc.setCharacterAttributes(selectionStart, frame.getTextArea().getSelectedText().length(), asNew, true);
+	    doc.setCharacterAttributes(selectionStart, parent.getTextArea().getSelectedText().length(), asNew, true);
 	}
 
 	public static void toggleUnderline(TextEditorFrame parent) {
-		StyledDocument doc = (StyledDocument) frame.getTextArea().getDocument();
-	    int selectionEnd = frame.getTextArea().getSelectionEnd();
-	    int selectionStart = frame.getTextArea().getSelectionStart();
+		StyledDocument doc = (StyledDocument) parent.getTextArea().getDocument();
+	    int selectionEnd = parent.getTextArea().getSelectionEnd();
+	    int selectionStart = parent.getTextArea().getSelectionStart();
 	    if (selectionStart == selectionEnd) {
 	      return;
 	    }
@@ -66,6 +66,6 @@ public class PreferencesOperations {
 
 	    MutableAttributeSet asNew = new SimpleAttributeSet(as.copyAttributes());
 	    StyleConstants.setUnderline(asNew, !StyleConstants.isUnderline(as));
-	    doc.setCharacterAttributes(selectionStart, frame.getTextArea().getSelectedText().length(), asNew, true);
+	    doc.setCharacterAttributes(selectionStart, parent.getTextArea().getSelectedText().length(), asNew, true);
 	}
 }
