@@ -49,8 +49,6 @@ public class FontFrame extends JInternalFrame {
 		add(bottomPanel, BorderLayout.PAGE_END);
 
 		setSize(400, 600);
-		// setAlwaysOnTop(true);
-		// setLocationRelativeTo(parent);
 		setResizable(false);
 		setVisible(true);
 	}

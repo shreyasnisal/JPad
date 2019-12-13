@@ -11,6 +11,7 @@ public class TextEditorFrame extends JFrame {
 	JTextPane textArea = new JTextPane();
 	Container defaultContentPane;
 
+
 	public TextEditorFrame() {
 		this("");
 	}
@@ -31,6 +32,13 @@ public class TextEditorFrame extends JFrame {
 
 		setJMenuBar(new TopMenuBar(this));
 
+		addWindowListener(new WindowAdapter() {
+			public void windowClosing(WindowEvent e) {
+				Driver.decrementFrameCount();
+			}
+		});
+
+		setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 		setSize(600, 800);
 		setLocationRelativeTo(null);
 	}
@@ -71,5 +79,14 @@ public class TextEditorFrame extends JFrame {
 	public void resetContentPane() {
 		setContentPane(defaultContentPane);
 	}
+
+	public void increaseFont() {
+		textArea.setFont(new Font(textArea.getFont().getName(), textArea.getFont().getStyle(), textArea.getFont().getSize() + 2));
+	}
+
+	public void decreaseFont() {
+		textArea.setFont(new Font(textArea.getFont().getName(), textArea.getFont().getStyle(), textArea.getFont().getSize() - 2));
+	}
+
 
 }

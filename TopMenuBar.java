@@ -1,8 +1,10 @@
 
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.datatransfer.*;
 import javax.swing.*;
 import javax.swing.event.*;
+import javax.swing.text.*;
 import java.io.*;
 
 public class TopMenuBar extends JMenuBar {
@@ -14,8 +16,6 @@ public class TopMenuBar extends JMenuBar {
 
 		this.frame = frame;
 
-		// JTextArea textArea = frame.getTextArea();
-
 		//File Menu
 		JMenu fileMenu = new JMenu("File");
 		fileMenu.setFont(menuBarFont);
@@ -26,8 +26,7 @@ public class TopMenuBar extends JMenuBar {
 		fileMenu.add(newFile);
 		newFile.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				frame.setCurrentFile(null);
-				frame.clearTextArea();
+				FileOperations.newFile(frame);
 			}
 		});
 
@@ -39,10 +38,7 @@ public class TopMenuBar extends JMenuBar {
 		openFile.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				JFileChooser chooser = new JFileChooser();
-			    chooser.showOpenDialog(frame);
-			    File fileToOpen = new File(chooser.getSelectedFile().getAbsolutePath());
-			    frame.setCurrentFile(fileToOpen);
+				FileOperations.openFile(frame);
 			}
 		});
 
@@ -53,23 +49,7 @@ public class TopMenuBar extends JMenuBar {
 		fileMenu.add(saveFile);
 		saveFile.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if (frame.getCurrentFile() == null) {
-					JFileChooser chooser = new JFileChooser(); 
-					chooser.setDialogTitle("Save File");
-					if (chooser.showDialog(frame, "Save") != JFileChooser.APPROVE_OPTION) { 
-				       	return;
-					}
-					frame.setCurrentFile(chooser.getSelectedFile());
-				}
-
-				try {
-			       	BufferedWriter b = new BufferedWriter(new FileWriter(frame.getCurrentFile()));
-			       	b.write(frame.getTextArea().getText());
-			    	b.close();
-				}
-				catch (IOException ex) {
-
-				}
+				FileOperations.saveFile(frame);
 			}
 		});
 
@@ -80,21 +60,7 @@ public class TopMenuBar extends JMenuBar {
 		fileMenu.add(saveFileAs);
 		saveFileAs.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				JFileChooser chooser = new JFileChooser(); 
-				chooser.setDialogTitle("Save File");
-				if (chooser.showDialog(frame, "Save") != JFileChooser.APPROVE_OPTION) { 
-			       	return;
-				}
-				frame.setCurrentFile(chooser.getSelectedFile());
-
-				try {
-			       	BufferedWriter b = new BufferedWriter(new FileWriter(frame.getCurrentFile()));
-			       	b.write(frame.getTextArea().getText());
-			    	b.close();
-				}
-				catch (IOException ex) {
-
-				}
+				FileOperations.saveFileAs(frame);
 			}
 		});
 
@@ -105,8 +71,7 @@ public class TopMenuBar extends JMenuBar {
 		fileMenu.add(newWindow);
 		newWindow.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				TextEditorFrame newFrame = new TextEditorFrame("JPad");
-				newFrame.setVisible(true);
+				FileOperations.newWindow();
 			}
 		});
 
@@ -117,7 +82,43 @@ public class TopMenuBar extends JMenuBar {
 		fileMenu.add(exit);
 		exit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
+				FileOperations.closeWindow(frame);
+			}
+		});
+
+
+		//Edit menu
+		JMenu editMenu = new JMenu("Edit");
+		editMenu.setFont(menuBarFont);
+
+		//Cut
+		JMenuItem cut = new JMenuItem("Cut");
+		cut.setFont(menuBarFont);
+		editMenu.add(cut);
+		cut.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				EditOperations.cut(frame);
+			}
+		});
+
+		//Copy
+		JMenuItem copy = new JMenuItem("Copy");
+		copy.setFont(menuBarFont);
+		editMenu.add(copy);
+		copy.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				EditOperations.copy(frame);
+			}
+		});
+
+
+		//paste
+		JMenuItem paste = new JMenuItem("Paste");
+		paste.setFont(menuBarFont);
+		editMenu.add(paste);
+		paste.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				EditOperations.paste(frame);
 			}
 		});
 
@@ -130,20 +131,66 @@ public class TopMenuBar extends JMenuBar {
 		//font
 		JMenuItem font = new JMenuItem("Font");
 		font.setFont(menuBarFont);
+		preferencesMenu.add(font);
 		font.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				JDesktopPane tempDesktopPane = new JDesktopPane();
-				FontFrame fontFrame = new FontFrame(frame, frame.getFont());
-				tempDesktopPane.add(fontFrame);
-				frame.setContentPane(tempDesktopPane);
+				PreferencesOperations.showFontFrame(frame);
 			}
 		});
 
-		preferencesMenu.add(font);
+		//font size
+		JMenu fontSize = new JMenu("Font Size");
+		fontSize.setFont(menuBarFont);
+		preferencesMenu.add(fontSize);
+		JMenuItem increaseFont = new JMenuItem("Larger");
+		increaseFont.setFont(menuBarFont);
+		fontSize.add(increaseFont);
+		JMenuItem decreaseFont = new JMenuItem("Smaller");
+		decreaseFont.setFont(menuBarFont);
+		fontSize.add(decreaseFont);
+		increaseFont.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				PreferencesOperations.increaseFontSize(frame);
+			}
+		});
+		decreaseFont.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				PreferencesOperations.decreaseFontSize(frame);
+			}
+		});
 
+		//font style
+		JMenu fontStyle = new JMenu("Font Style");
+		fontStyle.setFont(menuBarFont);
+		preferencesMenu.add(fontStyle);
+		JMenuItem bold = new JMenuItem("Bold");
+		bold.setFont(menuBarFont);
+		fontStyle.add(bold);
+		bold.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				PreferencesOperations.toggleBold(frame);
+			}
+		});
+		JMenuItem italics = new JMenuItem("Italics");
+		italics.setFont(menuBarFont);
+		fontStyle.add(italics);
+		italics.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				PreferencesOperations.toggleItalics(frame);
+			}
+		});
+		JMenuItem underline = new JMenuItem("Underline");
+		underline.setFont(menuBarFont);
+		fontStyle.add(underline);
+		underline.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				PreferencesOperations.toggleUnderline(frame);
+			}
+		});
 
 
 		add(fileMenu);
+		add(editMenu);
 		add(preferencesMenu);
 	}
 }
