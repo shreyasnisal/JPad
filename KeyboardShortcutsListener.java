@@ -5,6 +5,7 @@ import javax.swing.*;
 import javax.swing.event.*;
 
 
+
 public class KeyboardShortcutsListener extends KeyAdapter {
 
 	TextEditorFrame frame;
@@ -44,6 +45,12 @@ public class KeyboardShortcutsListener extends KeyAdapter {
 		else if (e.getKeyCode() == KeyEvent.VK_MINUS && (e.getModifiers() & KeyEvent.CTRL_MASK) != 0) {
 			System.out.println("Font-");
 			PreferencesOperations.decreaseFontSize(frame);
+		}
+		else if (e.getKeyCode() == KeyEvent.VK_Z && (e.getModifiers() & KeyEvent.CTRL_MASK) != 0) {
+			EditOperations.undo(frame);
+		}
+		else if (e.getKeyCode() == KeyEvent.VK_Y && (e.getModifiers() & KeyEvent.CTRL_MASK) != 0) {
+			EditOperations.redo(frame);
 		}
 	}
 }

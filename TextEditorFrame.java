@@ -4,12 +4,19 @@ import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.event.*;
 import java.io.*;
+import java.util.*;
+import javax.swing.undo.*;
 
 public class TextEditorFrame extends JFrame {
 
-	File currentFile = null;
-	JTextPane textArea = new JTextPane();
-	Container defaultContentPane;
+	private File currentFile = null;
+	private JTextPane textArea = new JTextPane();
+	private Container defaultContentPane;
+
+	public Stack<DocumentEvent> undoStack = new Stack<DocumentEvent>();
+	public Stack<DocumentEvent> redoStack = new Stack<DocumentEvent>();
+
+	private UndoManager manager = new UndoManager();
 
 
 	public TextEditorFrame() {
@@ -38,6 +45,22 @@ public class TextEditorFrame extends JFrame {
 				Driver.decrementFrameCount();
 			}
 		});
+
+		// textArea.getDocument().addDocumentListener(new DocumentListener() {
+		// 	public void removeUpdate(DocumentEvent e) {
+		// 		EditOperations.addToStack(undoStack, e);
+		// 	}
+
+		// 	public void insertUpdate(DocumentEvent e) {
+		// 		EditOperations.addToStack(undoStack, e);	
+		// 	}
+
+		// 	public void changedUpdate(DocumentEvent e) {
+				
+		// 	}
+		// });
+
+		textArea.getDocument().addUndoableEditListener(manager);
 
 		setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 		setSize(600, 800);
@@ -88,6 +111,8 @@ public class TextEditorFrame extends JFrame {
 	public void decreaseFont() {
 		textArea.setFont(new Font(textArea.getFont().getName(), textArea.getFont().getStyle(), textArea.getFont().getSize() - 2));
 	}
+
+	public UndoManager getUndoManager() { return manager; }
 
 
 }

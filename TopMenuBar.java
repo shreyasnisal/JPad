@@ -91,6 +91,26 @@ public class TopMenuBar extends JMenuBar {
 		JMenu editMenu = new JMenu("Edit");
 		editMenu.setFont(menuBarFont);
 
+		//Undo
+		JMenuItem undo = new JMenuItem("Undo");
+		undo.setFont(menuBarFont);
+		editMenu.add(undo);
+		undo.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				EditOperations.undo(frame);
+			}
+		});
+
+		//Redo
+		JMenuItem redo = new JMenuItem("Redo");
+		redo.setFont(menuBarFont);
+		editMenu.add(redo);
+		redo.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				EditOperations.redo(frame);
+			}
+		});
+
 		//Cut
 		JMenuItem cut = new JMenuItem("Cut");
 		cut.setFont(menuBarFont);
